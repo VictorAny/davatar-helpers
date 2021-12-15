@@ -13,6 +13,8 @@ export interface DavatarProps {
   // deprecated
   graphApiKey?: string;
   generatedAvatarType?: 'jazzicon' | 'blockies';
+  onEnsNameParsed?: (ensName: string) => void;
+  onUrlParsed?: (url: string) => void;
   defaultComponent?: ReactChild | ReactChild[];
   style?: CSSProperties;
 }
@@ -22,6 +24,8 @@ export default function Davatar({
   address,
   provider,
   graphApiKey,
+  onEnsNameParsed,
+  onUrlParsed,
   generatedAvatarType,
   defaultComponent,
   style,
@@ -54,6 +58,7 @@ export default function Davatar({
 
     eth.lookupAddress(address).then(ensName => {
       if (ensName) {
+        onEnsNameParsed(ensName);
         eth.getResolver(ensName).then(resolver => {
           resolver.getText('avatar').then(avatar => {
             if (avatar && avatar.length > 0) {
@@ -75,6 +80,7 @@ export default function Davatar({
       generatedAvatarType={generatedAvatarType}
       defaultComponent={defaultComponent}
       style={style}
+      onUrlParsed={onUrlParsed}
     />
   );
 }

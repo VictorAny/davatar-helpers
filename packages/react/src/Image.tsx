@@ -30,6 +30,7 @@ export interface Props {
   provider?: BaseProvider | null;
   generatedAvatarType?: 'jazzicon' | 'blockies';
   defaultComponent?: ReactChild | ReactChild[];
+  onUrlParsed?: (url: string) => void
 }
 
 export const getCachedUrl = (key: string) => {
@@ -93,6 +94,7 @@ export default function Avatar({
   provider,
   generatedAvatarType,
   defaultComponent,
+  onUrlParsed
 }: Props) {
   const [url, setUrl] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -275,7 +277,10 @@ export default function Avatar({
     ...(style || {}),
   };
 
-  if (url) {
+  if (url) { 
+    if (onUrlParsed) { 
+      onUrlParsed(url);
+    }
     avatarImg = <img alt="avatar" style={cssStyle} className={className} src={url} onLoad={onLoad} />;
   }
 
